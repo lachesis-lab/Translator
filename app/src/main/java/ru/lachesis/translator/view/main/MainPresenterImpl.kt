@@ -1,6 +1,7 @@
 package ru.lachesis.translator.view.main
 
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 import ru.lachesis.translator.model.data.AppState
 import ru.lachesis.translator.model.datasource.DataSourceLocal
 import ru.lachesis.translator.model.datasource.DataSourceRemote
@@ -8,31 +9,52 @@ import ru.lachesis.translator.model.repository.RepositorySimpleImpl
 import ru.lachesis.translator.presenter.Presenter
 import ru.lachesis.translator.rx.SchedulerProvider
 import ru.lachesis.translator.view.base.MvpView
-class MainPresenterImpl<T:AppState,V:MvpView>(
-    private  val interactor:
-        MainInteractor = MainInteractor(
+
+class MainPresenterImpl<T : AppState, V : MvpView>(
+    private val interactor:
+    MainInteractor = MainInteractor(
         RepositorySimpleImpl(DataSourceRemote()),
-        RepositorySimpleImpl(DataSourceLocal())),
-        protected val compositeDisposable: CompositeDisposable = CompositeDisposable(),
+        RepositorySimpleImpl(DataSourceLocal())
+    ),
+    protected val compositeDisposable: CompositeDisposable = CompositeDisposable(),
     protected val schedulerProvider: SchedulerProvider = SchedulerProvider()
-):Presenter<T,V>{
+) : Presenter<T, V> {
+    private var currentView: V? = null
+
     override fun attach(view: V) {
-        interactor
+        if (view != currentView) {
+            currentView = view
+        }
     }
 
     override fun detach(view: V) {
-        TODO("Not yet implemented")
+        compositeDisposable.clear()
+        if (view == currentView) {
+            currentView = null
+        }
     }
 
     override fun getData(word: String, isOnline: Boolean) {
-        TODO("Not yet implemented")
+        compositeDisposable.add(
+            interactor.getData(word, isOnline)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .doOnSubscribe { currentView?.renderData(AppState.Loading(null)) }
+                .subscribeWith(getObserver())
+        )
+    }
+
+    private fun getObserver(): DisposableSingleObserver<AppState> {
+        return object : DisposableSingleObserver<AppState>() {
+
+
+            override fun onError(e: Throwable) {
+                currentView?.renderData(AppState.Error(e))
+            }
+
+            override fun onSuccess(appState: AppState) {
+                currentView?.renderData(appState)
+            }
+        }
     }
 }
-//class MainPresenterImpl<T:AppState,V:MvpView>(
-//    private val interactor :MainInteractor = MainInteractor(RepositorySimpleImpl(),RepositorySimpleImpl()),
-//    protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
-//  //  protected val schedulerProvider: SchedulerProvider = SchedulerProvider()
-//): Presenter<T:AppState,V:MvpView> {
-//    private var currentView: V? = null
-
-//}

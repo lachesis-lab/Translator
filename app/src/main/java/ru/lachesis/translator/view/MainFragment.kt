@@ -4,23 +4,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.lachesis.translator.R
 import ru.lachesis.translator.databinding.MainFragmentBinding
 import ru.lachesis.translator.model.data.AppState
+import ru.lachesis.translator.model.data.DataModel
 import ru.lachesis.translator.presenter.Presenter
 import ru.lachesis.translator.view.base.BaseFragment
+import ru.lachesis.translator.view.base.MvpView
 import ru.lachesis.translator.view.main.MainPresenterImpl
+import ru.lachesis.translator.view.main.rvadapter.MainAdapter
 
 class MainFragment: BaseFragment<AppState>() {
     private var _binding: MainFragmentBinding? = null
     private val binding: MainFragmentBinding
         get() = _binding!!
 
+    private var adapter: MainAdapter? = null
+    private val onListItemClickListener: MainAdapter.OnListItemClickListener =
+        object : MainAdapter.OnListItemClickListener {
+            override fun onItemClick(data: DataModel) {
+                Toast.makeText(requireActivity(), data.text, Toast.LENGTH_SHORT).show()
+            }
+        }
+
     companion object {
-                private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =
+        private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =
             "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
-    
+
         const val BUNDLE_EXTRA = "Theme"
         fun newInstance(bundle: Bundle?): MainFragment {
             val fragment = MainFragment()
@@ -46,7 +59,6 @@ class MainFragment: BaseFragment<AppState>() {
             searchDialogFragment.show(childFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
         return binding.root
-//        return inflater.inflate(R.layout.main_fragment,container,false)
     }
 
 
@@ -54,7 +66,7 @@ class MainFragment: BaseFragment<AppState>() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun createPresenter(): Presenter<AppState, View> {
+    override fun createPresenter(): Presenter<AppState, MvpView> {
         return MainPresenterImpl()
     }
 /*
@@ -86,7 +98,7 @@ class MainFragment: BaseFragment<AppState>() {
                     showViewSuccess()
                     if (adapter == null) {
                         binding.mainActivityRecyclerview.layoutManager =
-                            LinearLayoutManager(applicationContext)
+                            LinearLayoutManager(requireContext())
                         binding.mainActivityRecyclerview.adapter =
                             MainAdapter(onListItemClickListener, dataModel)
                     } else {
@@ -120,7 +132,7 @@ class MainFragment: BaseFragment<AppState>() {
     }
 
     private fun showViewSuccess() {
-        binding.mainFrame .visibility = View.VISIBLE
+        binding.mainFrame.visibility = View.VISIBLE
         binding.loadingFrameLayout.visibility = View.GONE
         binding.errorLinearLayout.visibility = View.GONE
     }
@@ -136,6 +148,7 @@ class MainFragment: BaseFragment<AppState>() {
         binding.loadingFrameLayout.visibility = View.GONE
         binding.errorLinearLayout.visibility = View.VISIBLE
     }
+}
 
 //    companion object {
 //        private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =

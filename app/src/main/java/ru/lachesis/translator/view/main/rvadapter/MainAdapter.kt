@@ -15,6 +15,10 @@ class MainAdapter(
 
 ) : RecyclerView.Adapter<MainAdapter.RecyclerViewHolder>() {
 
+    fun setData(data: List<DataModel>) {
+        this.data = data
+        notifyDataSetChanged()
+    }
     inner class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
