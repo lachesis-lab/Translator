@@ -8,6 +8,6 @@ import ru.lachesis.translator.model.data.DataModel
 
 interface ApiService {
     @GET("words/search")
-    fun search(@Query("search") wordToSearch: String): Single<List<DataModel>>
+    fun search(@Query("search") wordToSearch: String): Observable<List<DataModel>>
 
 }

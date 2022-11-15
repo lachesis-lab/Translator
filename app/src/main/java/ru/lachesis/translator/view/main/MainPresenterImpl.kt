@@ -1,7 +1,7 @@
 package ru.lachesis.translator.view.main
 
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.observers.DisposableObserver
 import ru.lachesis.translator.model.data.AppState
 import ru.lachesis.translator.model.datasource.DataSourceLocal
 import ru.lachesis.translator.model.datasource.DataSourceRemote
@@ -44,16 +44,20 @@ class MainPresenterImpl<T : AppState, V : MvpView>(
         )
     }
 
-    private fun getObserver(): DisposableSingleObserver<AppState> {
-        return object : DisposableSingleObserver<AppState>() {
+    private fun getObserver(): DisposableObserver<AppState> {
+        return object : DisposableObserver<AppState>() {
 
 
             override fun onError(e: Throwable) {
                 currentView?.renderData(AppState.Error(e))
             }
 
-            override fun onSuccess(appState: AppState) {
+
+            override fun onNext(appState: AppState) {
                 currentView?.renderData(appState)
+            }
+
+            override fun onComplete() {
             }
         }
     }

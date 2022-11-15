@@ -1,7 +1,6 @@
 package ru.lachesis.translator.model.datasource
 
 import io.reactivex.Observable
-import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,7 +11,7 @@ import ru.lachesis.translator.model.data.DataModel
 
 class RetrofitImplementation(): DataSource<List<DataModel>> {
 
-    override fun getData(word: String): Single<List<DataModel>> {
+    override fun getData(word: String): Observable<List<DataModel>> {
         return getService(BaseInterceptor.interceptor).search(word)
     }
 

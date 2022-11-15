@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.lachesis.translator.R
 import ru.lachesis.translator.databinding.MainFragmentBinding
@@ -97,9 +96,9 @@ class MainFragment: BaseFragment<AppState>() {
                 } else {
                     showViewSuccess()
                     if (adapter == null) {
-                        binding.mainActivityRecyclerview.layoutManager =
+                        binding.mainFragmentRecyclerview .layoutManager =
                             LinearLayoutManager(requireContext())
-                        binding.mainActivityRecyclerview.adapter =
+                        binding.mainFragmentRecyclerview.adapter =
                             MainAdapter(onListItemClickListener, dataModel)
                     } else {
                         adapter!!.setData(dataModel)

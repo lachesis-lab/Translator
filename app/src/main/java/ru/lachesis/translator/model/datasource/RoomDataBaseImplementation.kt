@@ -1,10 +1,10 @@
 package ru.lachesis.translator.model.datasource
 
-import io.reactivex.Single
+import io.reactivex.Observable
 import ru.lachesis.translator.model.data.DataModel
 
 class RoomDataBaseImplementation(): DataSource<List<DataModel>> {
-    override fun getData(word: String): Single<List<DataModel>> {
+    override fun getData(word: String): Observable<List<DataModel>> {
         TODO("Not yet implemented")
     }
 
