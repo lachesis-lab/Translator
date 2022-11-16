@@ -5,25 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.lachesis.translator.R
 import ru.lachesis.translator.databinding.MainFragmentBinding
 import ru.lachesis.translator.model.data.AppState
 import ru.lachesis.translator.model.data.DataModel
-import ru.lachesis.translator.presenter.Presenter
 import ru.lachesis.translator.view.base.BaseFragment
-import ru.lachesis.translator.view.base.MvpView
-import ru.lachesis.translator.view.main.MainPresenterImpl
+import ru.lachesis.translator.view.main.MainViewModel
 import ru.lachesis.translator.view.main.rvadapter.MainAdapter
-import ru.lachesis.translator.viewmodel.BaseViewModel
 
 class MainFragment: BaseFragment<AppState>() {
     private var _binding: MainFragmentBinding? = null
     private val binding: MainFragmentBinding
         get() = _binding!!
 
+    override val viewModel: MainViewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
+    }
 
     private var adapter: MainAdapter? = null
+    private val observer = Observer<AppState> { renderData(it) }
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
@@ -51,10 +54,10 @@ class MainFragment: BaseFragment<AppState>() {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         binding.searchFab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
-            searchDialogFragment.setOnSearchClickListener(object :
-                SearchDialogFragment.OnSearchClickListener {
-                override fun onClick(searchWord: String) {
-                    presenter.getData(searchWord, true)
+            searchDialogFragment.setOnSearchClickListener(
+                object :       SearchDialogFragment.OnSearchClickListener {
+                    override fun onClick(searchWord: String) {
+                        viewModel.getData(searchWord, true).observe(requireActivity(), observer)
                 }
             })
             searchDialogFragment.show(childFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
@@ -67,27 +70,7 @@ class MainFragment: BaseFragment<AppState>() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun createPresenter(): Presenter<AppState, MvpView> {
-        return MainPresenterImpl()
-    }
-/*
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = MainFragmentBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-        binding.searchFab.setOnClickListener {
-            val searchDialogFragment = SearchDialogFragment.newInstance()
-            searchDialogFragment.setOnSearchClickListener(object :
-                SearchDialogFragment.OnSearchClickListener {
-                override fun onClick(searchWord: String) {
-                    presenter.getData(searchWord, true)
-                }
-            })
-            searchDialogFragment.show(childFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
-        }
-    }
-*/
 
     override fun renderData(appState: AppState) {
         when (appState) {
@@ -128,7 +111,7 @@ class MainFragment: BaseFragment<AppState>() {
         showViewError()
         binding.errorTextview.text = error ?: getString(R.string.undefined_error)
         binding.reloadButton.setOnClickListener {
-            presenter.getData("hi", true)
+            viewModel.getData("hi", true)
         }
     }
 

@@ -1,31 +1,15 @@
 package ru.lachesis.translator.view.base
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import ru.lachesis.translator.model.data.AppState
-import ru.lachesis.translator.presenter.Presenter
+import ru.lachesis.translator.viewmodel.BaseViewModel
 
-abstract class BaseFragment<T:AppState>: Fragment(),MvpView {
+abstract class BaseFragment<T : AppState> : Fragment() {
 
-    protected lateinit var presenter: Presenter<T, MvpView>
+    abstract val viewModel: BaseViewModel<T>
 
-    protected abstract fun createPresenter(): Presenter<T, MvpView>
+    abstract  fun renderData(appState: AppState)
 
-    abstract override fun renderData(appState: AppState)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenter = createPresenter()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        presenter.attach(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        presenter.detach(this)
-    }
 
 }
+

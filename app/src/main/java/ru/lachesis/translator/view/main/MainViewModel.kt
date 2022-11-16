@@ -40,7 +40,6 @@ class MainViewModel(
             }
 
             override fun onComplete() {
-                TODO("Not yet implemented")
             }
         }
 
