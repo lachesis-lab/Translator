@@ -15,11 +15,13 @@ import ru.lachesis.translator.view.base.BaseFragment
 import ru.lachesis.translator.view.base.MvpView
 import ru.lachesis.translator.view.main.MainPresenterImpl
 import ru.lachesis.translator.view.main.rvadapter.MainAdapter
+import ru.lachesis.translator.viewmodel.BaseViewModel
 
 class MainFragment: BaseFragment<AppState>() {
     private var _binding: MainFragmentBinding? = null
     private val binding: MainFragmentBinding
         get() = _binding!!
+
 
     private var adapter: MainAdapter? = null
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
