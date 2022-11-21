@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.lachesis.translator.R
 import ru.lachesis.translator.databinding.MainFragmentBinding
@@ -15,22 +14,32 @@ import ru.lachesis.translator.model.data.DataModel
 import ru.lachesis.translator.view.base.BaseFragment
 import ru.lachesis.translator.view.main.MainViewModel
 import ru.lachesis.translator.view.main.rvadapter.MainAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment: BaseFragment<AppState>() {
     private var _binding: MainFragmentBinding? = null
     private val binding: MainFragmentBinding
         get() = _binding!!
 
-    override val viewModel: MainViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
-    }
+    override lateinit var viewModel: MainViewModel
 
-    private var adapter: MainAdapter? = null
-    private val observer = Observer<AppState> { renderData(it) }
+    private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
+    //private val observer = Observer<AppState> { renderData(it) }
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
                 Toast.makeText(requireActivity(), data.text, Toast.LENGTH_SHORT).show()
+            }
+        }
+    private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
+        object : SearchDialogFragment.OnSearchClickListener {
+            override fun onClick(searchWord: String) {
+                isNetworkAvailable = isOnline(applicationContext)
+                if (isNetworkAvailable) {
+                    model.getData(searchWord, isNetworkAvailable)
+                } else {
+                    showNoInternetConnectionDialog()
+                }
             }
         }
 
@@ -132,10 +141,19 @@ class MainFragment: BaseFragment<AppState>() {
         binding.loadingFrameLayout.visibility = View.GONE
         binding.errorLinearLayout.visibility = View.VISIBLE
     }
+    private fun initViewModel() {
+        if (binding.mainFragmentRecyclerview.adapter != null) {
+            throw IllegalStateException("The ViewModel should be initialised first")
+        }
+        val vm: MainViewModel by viewModel()
+        viewModel =vm
+        viewModel.subscribe().observe(requireActivity(), { renderData(it) })
+    }
+
+    private fun initViews() {
+        binding.searchFab.setOnClickListener(fabClickListener)
+        binding.mainFragmentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        binding.mainFragmentRecyclerview.adapter = adapter
+    }
 }
 
-//    companion object {
-//        private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =
-//            "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
-//    }
-//}
