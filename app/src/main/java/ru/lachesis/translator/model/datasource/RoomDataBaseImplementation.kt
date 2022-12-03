@@ -1,6 +1,5 @@
 package ru.lachesis.translator.model.datasource
 
-import io.reactivex.Observable
 import ru.lachesis.translator.model.data.DataModel
 
 class RoomDataBaseImplementation(): DataSource<List<DataModel>> {

@@ -9,16 +9,16 @@ import ru.lachesis.translator.R
 import ru.lachesis.translator.model.data.DataModel
 import java.util.zip.Inflater
 
-class MainAdapter(
-    private var onListItemClickListener: OnListItemClickListener,
-    private var data: List<DataModel>
+class MainAdapter(  private var onListItemClickListener: OnListItemClickListener) :
+    RecyclerView.Adapter<MainAdapter.RecyclerViewHolder>() {
 
-) : RecyclerView.Adapter<MainAdapter.RecyclerViewHolder>() {
+    private var data: List<DataModel> = arrayListOf()
 
     fun setData(data: List<DataModel>) {
         this.data = data
         notifyDataSetChanged()
     }
+
     inner class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
@@ -30,12 +30,16 @@ class MainAdapter(
         }
 
     }
+
     private fun openInNewWindow(listItemData: DataModel) {
         onListItemClickListener.onItemClick(listItemData)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
-        return RecyclerViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_view_item,parent,false) as View)
+        return RecyclerViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.recycler_view_item, parent, false) as View
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {

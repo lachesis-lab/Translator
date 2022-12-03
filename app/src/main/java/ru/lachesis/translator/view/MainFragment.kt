@@ -15,6 +15,7 @@ import ru.lachesis.translator.view.base.BaseFragment
 import ru.lachesis.translator.view.main.MainViewModel
 import ru.lachesis.translator.view.main.rvadapter.MainAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.lachesis.translator.utils.network.isOnline
 
 class MainFragment: BaseFragment<AppState>() {
     private var _binding: MainFragmentBinding? = null
@@ -24,19 +25,25 @@ class MainFragment: BaseFragment<AppState>() {
     override lateinit var viewModel: MainViewModel
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
-    //private val observer = Observer<AppState> { renderData(it) }
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
                 Toast.makeText(requireActivity(), data.text, Toast.LENGTH_SHORT).show()
             }
         }
+    private val onFabClickListener: View.OnClickListener = View.OnClickListener{
+        val searchDialogFragment = SearchDialogFragment.newInstance()
+        searchDialogFragment.setOnSearchClickListener(onSearchClickListener)
+        searchDialogFragment.show(childFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
+
+    }
+
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
         object : SearchDialogFragment.OnSearchClickListener {
             override fun onClick(searchWord: String) {
-                isNetworkAvailable = isOnline(applicationContext)
+                isNetworkAvailable = isOnline(requireContext())
                 if (isNetworkAvailable) {
-                    model.getData(searchWord, isNetworkAvailable)
+                    viewModel.getData(searchWord, isNetworkAvailable)
                 } else {
                     showNoInternetConnectionDialog()
                 }
@@ -61,12 +68,20 @@ class MainFragment: BaseFragment<AppState>() {
         savedInstanceState: Bundle?,
     ): View? {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
+        initViewModel()
+        initViews()
         binding.searchFab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(
                 object :       SearchDialogFragment.OnSearchClickListener {
                     override fun onClick(searchWord: String) {
-                        viewModel.getData(searchWord, true).observe(requireActivity(), observer)
+//                        viewModel.getData(searchWord, true).observe(requireActivity(), observer)
+                        isNetworkAvailable = isOnline(requireContext())
+                        if (isNetworkAvailable) {
+                            viewModel.getData(searchWord, isNetworkAvailable)
+                        } else {
+                            showNoInternetConnectionDialog()
+                        }
                 }
             })
             searchDialogFragment.show(childFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
@@ -93,7 +108,7 @@ class MainFragment: BaseFragment<AppState>() {
                         binding.mainFragmentRecyclerview .layoutManager =
                             LinearLayoutManager(requireContext())
                         binding.mainFragmentRecyclerview.adapter =
-                            MainAdapter(onListItemClickListener, dataModel)
+                            MainAdapter(onListItemClickListener)
                     } else {
                         adapter!!.setData(dataModel)
                     }
@@ -151,7 +166,7 @@ class MainFragment: BaseFragment<AppState>() {
     }
 
     private fun initViews() {
-        binding.searchFab.setOnClickListener(fabClickListener)
+        binding.searchFab.setOnClickListener(onFabClickListener)
         binding.mainFragmentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.mainFragmentRecyclerview.adapter = adapter
     }

@@ -2,9 +2,12 @@ package ru.lachesis.translator.view.base
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import ru.lachesis.translator.R
 import ru.lachesis.translator.model.data.AppState
+import ru.lachesis.translator.utils.AlertDialogFragment
+import ru.lachesis.translator.utils.network.isOnline
 import ru.lachesis.translator.viewmodel.BaseViewModel
 
 abstract class BaseFragment<T : AppState> : Fragment() {
@@ -12,14 +15,14 @@ abstract class BaseFragment<T : AppState> : Fragment() {
     abstract val viewModel: BaseViewModel<T>
     protected var isNetworkAvailable: Boolean = false
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        isNetworkAvailable = isOnline(applicationContext)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        isNetworkAvailable = isOnline(requireContext())
     }
 
     override fun onResume() {
         super.onResume()
-        isNetworkAvailable = isOnline(applicationContext)
+        isNetworkAvailable = isOnline(requireContext())
         if (!isNetworkAvailable && isDialogNull()) {
             showNoInternetConnectionDialog()
         }
@@ -33,7 +36,7 @@ abstract class BaseFragment<T : AppState> : Fragment() {
     }
 
     protected fun showAlertDialog(title: String?, message: String?) {
-        AlertDialogFragment.newInstance(title, message).show(supportFragmentManager, DIALOG_FRAGMENT_TAG)
+        AlertDialogFragment.newInstance(title, message).show(childFragmentManager, DIALOG_FRAGMENT_TAG)
     }
 
     private fun isDialogNull(): Boolean {
