@@ -32,18 +32,7 @@ class DescriptionFragment() : Fragment() {
         setData()
     }
 
-    /*
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
-*/
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,7 +56,8 @@ class DescriptionFragment() : Fragment() {
         if (imageLink.isNullOrBlank()) {
             stopRefreshAnimationIfNeeded()
         } else {
-            useCoilToLoadPhoto(binding.descriptionImageview, imageLink)
+            requireActivity().findViewById<ImageView>(R.id.description_imageview)
+                ?.let { useCoilToLoadPhoto(it, imageLink) }
         }
     }
 

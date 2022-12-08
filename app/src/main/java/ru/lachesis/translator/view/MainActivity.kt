@@ -12,14 +12,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction().add(R.id.main_container,MainFragment.newInstance(savedInstanceState) ,null)
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container,MainFragment.newInstance(savedInstanceState) ,null)
             .commit()
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.history_menu_item)   {
-            supportFragmentManager.beginTransaction().replace(R.id.main_container, HistoryFragment.newInstance(),"").addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HistoryFragment.newInstance(),"").addToBackStack(null).commit()
             true}
         else super.onOptionsItemSelected(item)
     }
@@ -30,12 +30,4 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-/*
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.history_menu_item)   {
-            supportFragmentManager.beginTransaction().add(R.id.history_frame, HistoryFragment.newInstance(),"").commit()
-            true}
-        else super.onOptionsItemSelected(item)
-    }
-*/
 }

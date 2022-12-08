@@ -41,7 +41,7 @@ class MainFragment: BaseFragment<AppState>() {
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
-                childFragmentManager.beginTransaction().add(R.id.description_frame, DescriptionFragment.newInstance(data),null ).addToBackStack(null).commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_container, DescriptionFragment.newInstance(data),null )?.addToBackStack(null)?.commit()
 
             }
         }

@@ -21,8 +21,7 @@ abstract class BaseFragment<T : AppState> : Fragment() {
 
     abstract val viewModel: BaseViewModel<T>
     protected var isNetworkAvailable: Boolean = false
-    private lateinit var  binding: LoadingLayoutBinding
-
+    private lateinit var binding: LoadingLayoutBinding
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,15 +40,7 @@ abstract class BaseFragment<T : AppState> : Fragment() {
             showNoInternetConnectionDialog()
         }
 
-/*
-//        /*
-//           binding = LoadingLayoutBinding.inflate(layoutInflater)
-//           isNetworkAvailable = isOnline(requireContext())
-//           if (!isNetworkAvailable && isDialogNull()) {
-//               showNoInternetConnectionDialog()
-//           }
-showNoInternetConnectionDialog*/
-//   */
+
     }
 
     protected fun showNoInternetConnectionDialog() {
@@ -60,7 +51,8 @@ showNoInternetConnectionDialog*/
     }
 
     protected fun showAlertDialog(title: String?, message: String?) {
-        AlertDialogFragment.newInstance(title, message).show(childFragmentManager, DIALOG_FRAGMENT_TAG)
+        AlertDialogFragment.newInstance(title, message)
+            .show(childFragmentManager, DIALOG_FRAGMENT_TAG)
     }
 
     private fun isDialogNull(): Boolean {

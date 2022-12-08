@@ -31,14 +31,14 @@
             android:layout_gravity="center"/>
 
     </FrameLayout>
-
     <FrameLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/description_frame"
-        android:background="@drawable/ic_launcher_foreground"
+        android:background="@color/color_white"
         />
+
     <FrameLayout
         android:id="@+id/main_frame"
         android:layout_height="match_parent"
