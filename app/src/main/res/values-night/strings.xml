@@ -2,4 +2,5 @@
 <resources>
     <string name="reload">Reload</string>
     <string name="error_textview_stub">error</string>
+    <string name="history">History</string>
 </resources>

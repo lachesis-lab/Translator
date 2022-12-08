@@ -2,7 +2,11 @@ package ru.lachesis.translator.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import ru.lachesis.translator.R
+import ru.lachesis.translator.view.MainFragment.Companion.newInstance
+import ru.lachesis.translator.view.history.HistoryFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,4 +15,27 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.main_container,MainFragment.newInstance(savedInstanceState) ,null)
             .commit()
     }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.history_menu_item)   {
+            supportFragmentManager.beginTransaction().replace(R.id.main_container, HistoryFragment.newInstance(),"").addToBackStack(null).commit()
+            true}
+        else super.onOptionsItemSelected(item)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.history_menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+/*
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.history_menu_item)   {
+            supportFragmentManager.beginTransaction().add(R.id.history_frame, HistoryFragment.newInstance(),"").commit()
+            true}
+        else super.onOptionsItemSelected(item)
+    }
+*/
 }
