@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import ru.lachesis.translator.R
-import ru.lachesis.translator.view.MainFragment.Companion.newInstance
 import ru.lachesis.translator.view.history.HistoryFragment
 
 class MainActivity : AppCompatActivity() {

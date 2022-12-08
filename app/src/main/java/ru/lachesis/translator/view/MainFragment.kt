@@ -23,14 +23,6 @@ class MainFragment: BaseFragment<AppState>() {
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
 
-/*
-    private val onListItemClickListener: MainAdapter.OnListItemClickListener =
-        object : MainAdapter.OnListItemClickListener {
-            override fun onItemClick(data: DataModel) {
-                Toast.makeText(requireActivity(), data.text, Toast.LENGTH_SHORT).show()
-            }
-        }
-*/
 
     private val onFabClickListener: View.OnClickListener = View.OnClickListener{
         val searchDialogFragment = SearchDialogFragment.newInstance()

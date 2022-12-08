@@ -1,10 +1,7 @@
 package ru.lachesis.translator.view.description
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -17,7 +14,6 @@ import ru.lachesis.translator.model.data.DataModel
 import ru.lachesis.translator.utils.AlertDialogFragment
 import ru.lachesis.translator.utils.convertMeaningsToString
 import ru.lachesis.translator.utils.network.isOnline
-import ru.lachesis.translator.view.MainFragment
 
 class DescriptionFragment() : Fragment() {
     private lateinit var binding: DescriptionFragmentBinding
@@ -42,12 +38,6 @@ class DescriptionFragment() : Fragment() {
         return binding.root
     }
 
-/*
-    private fun setActionbarHomeButtonAsUp() {
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-*/
 
     private fun setData() {
         binding.descriptionHeader.text = arguments?.getString(WORD_EXTRA)
@@ -122,15 +112,3 @@ class DescriptionFragment() : Fragment() {
         }
     }
 }
-/*      fun getIntent(
-          context: Context,
-          word: String,
-          description: String,
-          url: String?
-      ): Intent = Intent(context, DescriptionActivity::class.java).apply {
-          putExtra(WORD_EXTRA, word)
-          putExtra(DESCRIPTION_EXTRA, description)
-          putExtra(URL_EXTRA, url)
-      }
-  }
-}*/
