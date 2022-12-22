@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import ru.lachesis.translator.R
 import ru.lachesis.translator.view.history.HistoryFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction().add(R.id.fragment_container,MainFragment.newInstance(savedInstanceState) ,null)
             .commit()
