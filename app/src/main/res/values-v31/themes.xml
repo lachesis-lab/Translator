@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MySplash" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.Translator</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="android:windowSplashScreenBackground">@android:color/holo_blue_light</item>
+    </style>
+</resources>
