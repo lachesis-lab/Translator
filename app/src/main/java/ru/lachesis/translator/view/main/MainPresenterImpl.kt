@@ -17,9 +17,11 @@ class MainPresenterImpl<T : AppState, V : MvpView>(
         RepositorySimpleImpl(DataSourceLocal())
     ),
     protected val compositeDisposable: CompositeDisposable = CompositeDisposable(),
-    protected val schedulerProvider: SchedulerProvider = SchedulerProvider()
-) : Presenter<T, V> {
+    protected val schedulerProvider: SchedulerProvider = SchedulerProvider(),
     private var currentView: V? = null
+) : Presenter<T, V> {
+
+    val state: AppState? = null
 
     override fun attach(view: V) {
         if (view != currentView) {
